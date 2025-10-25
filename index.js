@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
-
+const port = process.env.PORT || 5000;
 const app = express();
 
 app.use(express.json());
@@ -18,10 +18,10 @@ mongoose.connect("mongodb+srv://Sanjay:2003@cluster0.uu7enka.mongodb.net/passkey
     socketTimeoutMS: 45000,
 })
 .then(() => {
-    console.log("✅ DB is connected");
+    console.log("DB is connected");
 })
 .catch((err) => {
-    console.log("❌ Failed to connect to DB:", err.message);
+    console.log(" Failed to connect to DB:", err.message);
 });
 
 app.post("/sendemail", async (req, res) => {
@@ -88,9 +88,9 @@ app.post("/sendemail", async (req, res) => {
         // Verify transporter
         try {
             await transporter.verify();
-            console.log("✅ Email transporter verified");
+            console.log(" Email transporter verified");
         } catch (verifyError) {
-            console.error("❌ Transporter verification failed:", verifyError.message);
+            console.error(" Transporter verification failed:", verifyError.message);
             return res.status(500).json({ 
                 success: false,
                 status: "Email authentication failed. Please check Gmail credentials.",
@@ -113,12 +113,12 @@ app.post("/sendemail", async (req, res) => {
                 });
                 
                 successCount++;
-                console.log(`✅ [${i + 1}/${validEmails.length}] Email sent to: ${validEmails[i]}`);
+                console.log(` [${i + 1}/${validEmails.length}] Email sent to: ${validEmails[i]}`);
                 results.push({ email: validEmails[i], success: true });
                 
             } catch (error) {
                 failCount++;
-                console.error(`❌ [${i + 1}/${validEmails.length}] Failed to send to: ${validEmails[i]}`, error.message);
+                console.error(` [${i + 1}/${validEmails.length}] Failed to send to: ${validEmails[i]}`, error.message);
                 results.push({ email: validEmails[i], success: false, error: error.message });
             }
         }
@@ -138,7 +138,7 @@ app.post("/sendemail", async (req, res) => {
         });
 
     } catch (error) {
-        console.error("❌ Server Error:", error);
+        console.error(" Server Error:", error);
         res.status(500).json({ 
             success: false,
             status: "Server error occurred",
@@ -157,6 +157,6 @@ app.get("/health", (req, res) => {
 
 const PORT = 5000;
 app.listen(PORT, () => {
-    console.log(`🚀 Server started on http://localhost:${PORT}`);
-    console.log(`📡 Health check: http://localhost:${PORT}/health`);
+    console.log(` Server started on http://localhost:${PORT}`);
+    console.log(` Health check: http://localhost:${PORT}/health`);
 });
