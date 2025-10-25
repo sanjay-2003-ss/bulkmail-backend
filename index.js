@@ -13,7 +13,7 @@ const credentialsSchema = new mongoose.Schema({}, { strict: false });
 const credentials = mongoose.model("credentials", credentialsSchema, "bulkmail");
 
 // Connect to MongoDB
-mongoose.connect("mongodb+srv://Sanjay:2003@cluster0.uu7enka.mongodb.net/passkey?retryWrites=true&w=majority&appName=Cluster0", {
+mongoose.connect("mongodb+srv://Sanjay:2003@cluster0.uu7enka.mongodb.net/passkey?appName=Cluster0", {
     serverSelectionTimeoutMS: 5000,
     socketTimeoutMS: 45000,
 })
