@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 
+
 const app = express();
 
 app.use(express.json());
@@ -13,7 +14,10 @@ const credentialsSchema = new mongoose.Schema({}, { strict: false });
 const credentials = mongoose.model("credentials", credentialsSchema, "bulkmail");
 
 // Connect to MongoDB
-mongoose.connect("mongodb+srv://Sanjay:2003@cluster0.uu7enka.mongodb.net/passkey?appName=Cluster0", {
+mongoose.connect(process.env.MONGO_URL,
+    
+{
+  
     serverSelectionTimeoutMS: 5000,
     socketTimeoutMS: 45000,
 })
@@ -80,8 +84,8 @@ app.post("/sendemail", async (req, res) => {
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                user: 'sanjaykiruthish@gmail.com',
-                pass: 'ynee rhrs vmah snqt', // Use env variables in production
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS, // Use env variables in production
             },
         });
 
@@ -155,8 +159,8 @@ app.get("/health", (req, res) => {
     });
 });
 
-const PORT = 5000;
-app.listen(PORT, () => {
-    console.log(` Server started on http://localhost:${PORT}`);
-    console.log(` Health check: http://localhost:${PORT}/health`);
+const port = process.env.PORT || 5000
+app.listen(port, () => {
+    console.log(` Server started on http://localhost:${port}`);
+    console.log(` Health check: http://localhost:${port}/health`);
 });
